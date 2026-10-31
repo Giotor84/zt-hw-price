@@ -1,0 +1,266 @@
+# MOTORE_PREZZI_AI - catalogo hardware per la DASHBOARD unificata (tutte le taglie, non solo 128GB).
+# Banda = GB/s effettivi (generazione token banda-limitata: t/s ~ banda / byte-per-token).
+# Valori di riferimento (schede + benchmark pubblici); stime dichiarate, non misure nostre.
+reference_bandwidth_gbs: 220        # Strix Halo reale: base di calibrazione dei t/s misurati
+hardware:
+  # ===================== Mini-PC Strix Halo (memoria unificata) =====================
+  - id: sh-32
+    family: "Mini-PC Strix Halo"
+    name: "Strix Halo 32GB (Ryzen AI Max 385/390)"
+    kind: unified
+    memory_gb: 32
+    usable_gb: 24
+    bandwidth_gbs: 220
+    tdp_sustained_w: 100
+    tdp_peak_w: 120
+    noise_dba: "variabile"
+    expand: "dipende dal modello"
+    note: "Entra fino a ~24GB: solo modelli 7-14B."
+  - id: sh-64
+    family: "Mini-PC Strix Halo"
+    name: "Strix Halo 64GB (Ryzen AI Max 390/395)"
+    kind: unified
+    memory_gb: 64
+    usable_gb: 48
+    bandwidth_gbs: 220
+    tdp_sustained_w: 120
+    tdp_peak_w: 140
+    noise_dba: "variabile"
+    expand: "dipende dal modello"
+    note: "Entra fino a ~48GB: 70B Q4 stretto, 30B comodo."
+  - id: ms-s1-max
+    family: "Mini-PC Strix Halo"
+    name: "Minisforum MS-S1 MAX 128GB"
+    kind: unified
+    memory_gb: 128
+    usable_gb: 96
+    bandwidth_gbs: 220
+    tdp_sustained_w: 130
+    tdp_peak_w: 160
+    noise_dba: "~48-50 dBA"
+    expand: "PCIe x16 (x4 elec), 2x M.2, dual 10GbE, 2U rack"
+    note: "TDP piu' alto del gruppo -> prefill/contesto lungo piu' rapidi."
+  - id: evo-x2
+    family: "Mini-PC Strix Halo"
+    name: "GMKtec EVO-X2 / X3 128GB"
+    kind: unified
+    memory_gb: 128
+    usable_gb: 96
+    bandwidth_gbs: 220
+    tdp_sustained_w: 120
+    tdp_peak_w: 140
+    noise_dba: "udibile"
+    expand: "2x M.2, USB4"
+    note: "31B dense ~10.8 t/s (~130W, 82C senza throttle)."
+  - id: gtr9-pro
+    family: "Mini-PC Strix Halo"
+    name: "Beelink GTR9 Pro 128GB"
+    kind: unified
+    memory_gb: 128
+    usable_gb: 96
+    bandwidth_gbs: 220
+    tdp_sustained_w: 140
+    tdp_peak_w: 140
+    noise_dba: "36-41 dBA"
+    expand: "2x M.2, dual 10GbE, USB4"
+    note: "120B ~31 t/s (LM Studio), silenzioso."
+  - id: framework-desktop
+    family: "Mini-PC Strix Halo"
+    name: "Framework Desktop 128GB"
+    kind: unified
+    memory_gb: 128
+    usable_gb: 96
+    bandwidth_gbs: 220
+    tdp_sustained_w: 120
+    tdp_peak_w: 120
+    noise_dba: "silenzioso (Noctua)"
+    expand: "PCIe x4, mainboard riparabile/sostituibile"
+    note: "120B ~50 t/s (Vulkan)."
+  - id: minix-er939
+    family: "Mini-PC Strix Halo"
+    name: "MINIX Elite ER939-AI 128GB"
+    kind: unified
+    memory_gb: 128
+    usable_gb: 96
+    bandwidth_gbs: 220
+    tdp_sustained_w: 120
+    tdp_peak_w: 120
+    noise_dba: "contenuto"
+    expand: "2x M.2, 2.5GbE, USB4"
+    note: "Profili 55/85/120 W da BIOS."
+
+  # ===================== GPU consumer (CUDA) =====================
+  - id: rtx-3090
+    family: "GPU consumer"
+    name: "NVIDIA RTX 3090 24GB (CUDA)"
+    kind: gpu
+    memory_gb: 24
+    usable_gb: 23
+    bandwidth_gbs: 900
+    tdp_sustained_w: 350
+    tdp_peak_w: 350
+    noise_dba: "dipende dal sistema"
+    expand: "PCIe x16"
+    note: "Fino a ~22GB; oltre -> spill in RAM (lento)."
+  - id: rtx-4090
+    family: "GPU consumer"
+    name: "NVIDIA RTX 4090 24GB (CUDA)"
+    kind: gpu
+    memory_gb: 24
+    usable_gb: 23
+    bandwidth_gbs: 1000
+    tdp_sustained_w: 450
+    tdp_peak_w: 450
+    noise_dba: "dipende dal sistema"
+    expand: "PCIe x16"
+    note: "Molto veloce sui modelli che entrano."
+  - id: rtx-5090
+    family: "GPU consumer"
+    name: "NVIDIA RTX 5090 32GB (CUDA)"
+    kind: gpu
+    memory_gb: 32
+    usable_gb: 30
+    bandwidth_gbs: 1790
+    tdp_sustained_w: 575
+    tdp_peak_w: 575
+    noise_dba: "dipende dal sistema"
+    expand: "PCIe x16"
+    note: "Il piu' veloce sui modelli fino a 30GB."
+  - id: 2x-3090
+    family: "GPU consumer"
+    name: "2x RTX 3090 48GB (CUDA)"
+    kind: gpu
+    memory_gb: 48
+    usable_gb: 46
+    bandwidth_gbs: 1750
+    tdp_sustained_w: 700
+    tdp_peak_w: 700
+    noise_dba: "dipende dal sistema"
+    expand: "2x PCIe x16 (tensor-parallel)"
+    note: "Banda ~somma con overhead; multi-GPU piu' complesso."
+  - id: 2x-4090
+    family: "GPU consumer"
+    name: "2x RTX 4090 48GB (CUDA)"
+    kind: gpu
+    memory_gb: 48
+    usable_gb: 46
+    bandwidth_gbs: 1950
+    tdp_sustained_w: 900
+    tdp_peak_w: 900
+    noise_dba: "dipende dal sistema"
+    expand: "2x PCIe x16 (tensor-parallel)"
+    note: "Molto veloce ma ingombrante/costoso."
+
+  # ===================== Apple Silicon (MLX) =====================
+  - id: m4-pro-64
+    family: "Apple Silicon"
+    name: "Apple M4 Pro 64GB (MLX)"
+    kind: unified
+    memory_gb: 64
+    usable_gb: 48
+    bandwidth_gbs: 273
+    tdp_sustained_w: 60
+    tdp_peak_w: 90
+    noise_dba: "silenzioso"
+    expand: "Thunderbolt"
+    note: "Banda 273 GB/s: buona, sotto Strix Halo 128."
+  - id: m4-max-128
+    family: "Apple Silicon"
+    name: "Apple M4 Max 128GB (MLX)"
+    kind: unified
+    memory_gb: 128
+    usable_gb: 96
+    bandwidth_gbs: 546
+    tdp_sustained_w: 140
+    tdp_peak_w: 140
+    noise_dba: "molto silenzioso"
+    expand: "Thunderbolt"
+    note: "Banda ~2.5x Strix Halo."
+  - id: m3-ultra-256
+    family: "Apple Silicon"
+    name: "Apple M3 Ultra 256GB (MLX)"
+    kind: unified
+    memory_gb: 256
+    usable_gb: 192
+    bandwidth_gbs: 819
+    tdp_sustained_w: 250
+    tdp_peak_w: 300
+    noise_dba: "silenzioso"
+    expand: "Thunderbolt"
+    note: "Grande e veloce: regge 70B dense e MoE enormi."
+  - id: m2-ultra-192
+    family: "Apple Silicon"
+    name: "Apple M2 Ultra 192GB (MLX)"
+    kind: unified
+    memory_gb: 192
+    usable_gb: 144
+    bandwidth_gbs: 800
+    tdp_sustained_w: 250
+    tdp_peak_w: 295
+    noise_dba: "silenzioso"
+    expand: "Thunderbolt"
+    note: "Alternativa usata per modelli grandi."
+
+  # ===================== Workstation AI =====================
+  - id: dgx-spark
+    family: "Workstation AI"
+    name: "NVIDIA DGX Spark (GB10) 128GB"
+    kind: unified
+    memory_gb: 128
+    usable_gb: 119
+    bandwidth_gbs: 273
+    tdp_sustained_w: 140
+    tdp_peak_w: 240
+    noise_dba: "contenuto"
+    expand: "ConnectX, 2x USB4; cluster possibile"
+    note: "Software CUDA/GB10; banda ~273 GB/s, quasi tutti i 128GB usabili."
+  - id: rtx-pro-6000
+    family: "Workstation AI"
+    name: "NVIDIA RTX PRO 6000 Blackwell 96GB"
+    kind: gpu
+    memory_gb: 96
+    usable_gb: 94
+    bandwidth_gbs: 1792
+    tdp_sustained_w: 600
+    tdp_peak_w: 600
+    noise_dba: "dipende dal sistema"
+    expand: "PCIe x16"
+    note: "Veloce e con 96GB: ma costosa."
+
+  # ===================== GPU pro / datacenter =====================
+  - id: rtx-a6000
+    family: "GPU pro / datacenter"
+    name: "NVIDIA RTX A6000 48GB"
+    kind: gpu
+    memory_gb: 48
+    usable_gb: 46
+    bandwidth_gbs: 768
+    tdp_sustained_w: 300
+    tdp_peak_w: 300
+    noise_dba: "dipende dal sistema"
+    expand: "PCIe x16"
+    note: "48GB ECC; banda media."
+  - id: l40s
+    family: "GPU pro / datacenter"
+    name: "NVIDIA L40S 48GB"
+    kind: gpu
+    memory_gb: 48
+    usable_gb: 46
+    bandwidth_gbs: 864
+    tdp_sustained_w: 350
+    tdp_peak_w: 350
+    noise_dba: "dipende dal sistema"
+    expand: "PCIe x16"
+    note: "Datacenter, no NVLink."
+  - id: h100-80
+    family: "GPU pro / datacenter"
+    name: "NVIDIA H100 SXM 80GB"
+    kind: gpu
+    memory_gb: 80
+    usable_gb: 78
+    bandwidth_gbs: 3350
+    tdp_sustained_w: 700
+    tdp_peak_w: 700
+    noise_dba: "dipende dal sistema"
+    expand: "PCIe/NVLink"
+    note: "Il piu' veloce in assoluto su cio' che entra (80GB)."

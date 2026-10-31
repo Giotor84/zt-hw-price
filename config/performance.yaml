@@ -1,0 +1,142 @@
+# MOTORE_PREZZI_AI - riferimenti di PRESTAZIONE (SEPARATI dallo score prezzo/qualita').
+# Fonti: benchmark pubblici su Ryzen AI Max+ 395 / Strix Halo (128GB) -
+#   lhl/strix-halo-testing (llama-bench), ServeTheHome (Beelink GTR9 Pro, Minisforum),
+#   NotebookCheck (MS-S1 Max), computingforgeeks (tabella comparativa 5 mini-PC),
+#   skip.watch / PRO Hi-Tech, minipcblogs (EVO-X2, GTR9 Pro, MINIX ER939), AMD/Qwen blog.
+#
+# PUNTO CHIAVE: tutti questi mini-PC montano lo STESSO SoC + la STESSA memoria, quindi
+# a parita' di modello/quantizzazione i TOKEN/S sono ~identici. La differenza la fanno
+# TDP SOSTENUTO / TERMICA / RUMORE (cioe' se la velocita' tiene su generazioni lunghe).
+
+chip:
+  name: "AMD Ryzen AI Max+ 395 (Strix Halo)"
+  igpu: "Radeon 8060S (40 CU, RDNA 3.5)"
+  npu_tops: 50
+  total_tops: 126
+  memory: "128GB LPDDR5x-8000, bus 256-bit"
+  bandwidth_theoretical_gbs: 256
+  bandwidth_real_gbs: 220        # misurato ~215-230 GB/s
+  vram_addressable_gb: 96
+  note: >-
+    La generazione di token e' vincolata dalla BANDA di memoria, non dal calcolo:
+    aumentare clock o raffreddamento NON alza i t/s sui modelli dense. Il NPU (50 TOPS)
+    oggi non e' usato da llama.cpp/Ollama/LM Studio (girano sull'iGPU).
+
+# Modelli LLM di riferimento: i t/s valgono per QUALSIASI box con questo chip.
+models:
+  - id: gpt-oss-120b
+    label: "GPT-OSS 120B (MoE)"
+    params_b: 116.8
+    active_b: 5.7
+    quant: MXFP4
+    size_gb: 59
+    tok_s_low: 30
+    tok_s_high: 55
+    note: "MoE (~6B attivi/token) -> usabile. LM Studio out-of-box ~31, Vulkan ~52-55."
+  - id: qwen3-30b-a3b
+    label: "Qwen3 30B-A3B (MoE)"
+    params_b: 30.5
+    active_b: 3.0
+    quant: Q4_K_M
+    size_gb: 17
+    tok_s_low: 52
+    tok_s_high: 74
+    note: "Punto dolce per uso interattivo: MoE, alta velocita'."
+  - id: qwen3-32b
+    label: "Qwen 32B (dense)"
+    params_b: 32
+    active_b: 32
+    quant: Q4_K_M
+    size_gb: 20
+    tok_s_low: 8
+    tok_s_high: 12
+    note: "Dense: banda-limitato."
+  - id: gemma-4-31b
+    label: "Gemma 31B (dense)"
+    params_b: 31
+    active_b: 31
+    quant: Q4_K_M
+    size_gb: 19.6
+    tok_s_low: 10.8
+    tok_s_high: 10.8
+    note: "EVO-X2 misurato 10.85 t/s Q4 a ~130W."
+  - id: llama-3.3-70b
+    label: "Llama 3.3 70B (dense)"
+    params_b: 70
+    active_b: 70
+    quant: Q4_K_M
+    size_gb: 40
+    tok_s_low: 4
+    tok_s_high: 6
+    note: "Dense 70B: cap di banda ~5 t/s (GTR9 Pro 4.89, Vulkan ~5)."
+  - id: llama-3.1-8b
+    label: "Llama 3.1 8B (dense)"
+    params_b: 8
+    active_b: 8
+    quant: Q4_K_M
+    size_gb: 5
+    tok_s_low: 25
+    tok_s_high: 50
+    note: "Piccoli modelli: veloci, ma una GPU discreta e' piu' rapida."
+  - id: qwen3-235b-a22b
+    label: "Qwen3 235B-A22B (MoE)"
+    params_b: 235
+    active_b: 22
+    quant: Q3_K_XL
+    size_gb: 100
+    tok_s_low: 12
+    tok_s_high: 13
+    note: "Usa (quasi) tutti i 128GB; 1 nodo ~12.9 t/s."
+
+# Cio' che distingue FISICAMENTE i box (non il chip): TDP sostenuto, termica, rumore, espansione.
+devices:
+  - match: ["MS-S1 MAX", "ms-s1-max", "M1-S1"]
+    name: "Minisforum MS-S1 MAX"
+    sustained_w: 130
+    peak_w: 160
+    power_modes: "Quiet 80 · Balanced 110 · Performance 130 · Rack 120 (W sostenuti)"
+    noise: "rumoroso (critica all'inattivo; ~48-50 dBA sotto carico)"
+    cooling: "6 heatpipe + phase-change, doppia ventola"
+    vram_gb: 96
+    expand: "PCIe x16 fisico (x4 elettrico) low-profile; 2x M.2 (x4+x1); dual 10GbE; 2U rack; cluster"
+    note: "~10% piu' veloce del Bosgame M5 grazie al TDP piu' alto."
+  - match: ["EVO-X2", "EVO X2", "EVO-X3"]
+    name: "GMKtec EVO-X2 / X3"
+    sustained_w: 120
+    peak_w: 140
+    power_modes: "Balanced 120 · Performance 140"
+    noise: "udibile a distanza in carico"
+    cooling: "vapor chamber + dual fan"
+    vram_gb: 96
+    expand: "2x M.2; USB4 (X2: 2.5GbE)"
+    note: "31B dense ~10.8 t/s a ~130W, 82C senza throttle."
+  - match: ["GTR9", "GTR9 Pro"]
+    name: "Beelink GTR9 Pro"
+    sustained_w: 140
+    peak_w: 140
+    power_modes: "140W sostenuti (PSU 230W)"
+    noise: "36-41 dBA in carico (silenzioso)"
+    cooling: "vapor chamber + 2 ventole"
+    vram_gb: 96
+    expand: "2x M.2; dual 10GbE; USB4 (bug 10GbE nelle prime unita')"
+    note: "gpt-oss-120b ~31 t/s a ~120W (ServeTheHome)."
+  - match: ["Framework"]
+    name: "Framework Desktop"
+    sustained_w: 120
+    peak_w: 120
+    power_modes: "120W (ventole Noctua opzionali)"
+    noise: "silenzioso (Noctua)"
+    cooling: "Noctua, silenzioso"
+    vram_gb: 96
+    expand: "PCIe x4 (NO x16 fisico); mainboard riparabile/sostituibile"
+    note: "120B ~50 t/s (Vulkan); 70B ~5 t/s."
+  - match: ["MINIX", "ER939"]
+    name: "MINIX Elite ER939-AI"
+    sustained_w: 120
+    peak_w: 120
+    power_modes: "Silent 55 · Balanced 85 · Performance 120 (da BIOS)"
+    noise: "contenuto"
+    cooling: "n.d."
+    vram_gb: 96
+    expand: "2x M.2; 2.5GbE singola; USB4"
+    note: "Misure di banda in linea col resto del platform."

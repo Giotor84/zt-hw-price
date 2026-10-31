@@ -1,0 +1,62 @@
+# Modello di punteggio: miglior prezzo + miglior qualita'.
+destination: IT
+base_currency: EUR
+
+# Costo finale (landed): IVA/dazi applicati se origin_eu e' False o None.
+import:
+  vat_rate: 0.22          # IVA Italia
+  duty_rate_electronics: 0.0
+  duty_rate_default: 0.04
+  handling_fee: 12.0      # sdoganamento forfettario per collo extra-UE
+
+# Pesi del punteggio totale (somma libera, viene normalizzata).
+weights:
+  price: 0.45
+  quality: 0.30
+  trust: 0.15
+  spec: 0.10
+
+# Livelli condizione -> fattore qualita' (0..1).
+condition_factor:
+  new: 1.00
+  open_box: 0.85
+  refurb: 0.75
+  used: 0.55
+  unknown: 0.40
+
+# Negozi fidati (trust alto). Match su sottostringa del nome venditore/source.
+trusted_retailers:
+  whitelist:
+    - frame.work
+    - minisforum
+    - gmktec
+    - apple
+    - backmarket
+    - refurbed
+    - amazon
+    - mediamarkt
+    - euronics
+    - unieuro
+  blacklist: []   # negozi da escludere
+
+# Filtri tassativi.
+filters:
+  require_ships_to: IT
+  min_spec_match: 0.6     # sotto questa soglia l'offerta e' scartata
+  exclude_out_of_stock: true
+  outlier_min_ratio: 0.4  # scarta offerte < 40% della mediana della fonte
+  outlier_min_count: 4    # ...ma solo se la fonte ha almeno 4 offerte
+  # Parole nel titolo che indicano hardware NON-AI (mini-PC da ufficio/thin client):
+  # l'offerta viene scartata a prescindere dalla query.
+  reject_price_above: 90000  # prezzo sentinella/placeholder (es. 99999 USD) -> scarta
+  non_ai_keywords:
+    - n5105
+    - n5095
+    - n100
+    - n150
+    - jasper lake
+    - celeron
+    - pentium silver
+    - intel atom
+    - office mini pc
+    - mini pc office

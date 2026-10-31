@@ -1,0 +1,20 @@
+# Prodotti da monitorare. spec: vincoli che l'offerta deve rispettare.
+# target_price: soglia (landed, EUR) sotto la quale scatta l'alert.
+products:
+  - id: framework-desktop-128
+    query: "Framework Desktop Ryzen AI Max+ 395 128GB"
+    spec:
+      ram_gb: 128
+      cpu: "395"
+    target_price: 3200
+  - id: minisforum-ms-s1-max-128
+    query: "Minisforum MS-S1 Max 128GB"
+    spec:
+      ram_gb: 128
+    target_price: 3600
+  - id: rtx-3090-24
+    query: "RTX 3090 24GB"
+    spec:
+      vram_gb: 24
+    target_price: 1200
+    condition_any: true   # per l'usato ammettiamo condition != new

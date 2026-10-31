@@ -1,0 +1,92 @@
+# Fonti del motore prezzi. Ogni voce: adapter + parametri.
+# enabled: false mette la fonte a riposo senza cancellarla.
+# reliability: nota di affidabilita' dell'acquisizione (alta/media/bassa).
+# origin_eu: True se la merce spedisce dall'UE (niente dazi/IVA import).
+# Strategia: API JSON, NON scraping di HTML.
+defaults:
+  timeout_s: 20
+  min_delay_s: 1.0
+  max_delay_s: 2.5
+
+sources:
+  - name: minisforum
+    adapter: shopify
+    enabled: true
+    locale: us
+    origin_eu: false
+    reliability: alta
+    base: https://store.minisforum.com
+    currency: USD
+    limit: 10
+    note: "Shopify search/suggest.json + products.json"
+
+  - name: gmktec
+    adapter: shopify
+    enabled: true
+    locale: us
+    origin_eu: false
+    reliability: alta
+    base: https://www.gmktec.com
+    currency: USD
+    limit: 10
+    note: "Shopify JSON"
+
+  - name: minisforum_com
+    adapter: shopify
+    enabled: true
+    locale: us
+    origin_eu: false
+    reliability: alta
+    base: https://www.minisforum.com
+    limit: 10
+    note: "Shopify JSON (store principale; valuta auto da /cart.js)"
+
+  - name: aoostar
+    adapter: shopify
+    enabled: true
+    locale: us
+    origin_eu: false
+    reliability: alta
+    base: https://www.aoostar.com
+    limit: 10
+    note: "Shopify JSON"
+
+  - name: acemagic
+    adapter: shopify
+    enabled: true
+    locale: us
+    origin_eu: false
+    reliability: alta
+    base: https://www.acemagic.com
+    limit: 10
+    note: "Shopify JSON"
+
+  - name: minix
+    adapter: shopify
+    enabled: true
+    locale: us
+    origin_eu: false
+    reliability: alta
+    base: https://minix.com.hk
+    limit: 10
+    note: "Shopify JSON"
+
+  - name: frame_work
+    adapter: direct_store
+    enabled: false
+    locale: eu
+    origin_eu: true
+    reliability: bassa
+    base: https://frame.work
+    search_url: https://frame.work/it/en/desktop
+    note: "Cloudflare + app Rails: nessuna API JSON pubblica."
+
+  - name: template_shopify
+    adapter: shopify
+    enabled: false
+    locale: eu
+    origin_eu: true
+    base: https://example.myshopify.com
+    currency: EUR
+    limit: 10
+    note: "Copia per aggiungere altri negozi Shopify (molti vendor hanno anche store EU)."
